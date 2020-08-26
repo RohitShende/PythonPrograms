@@ -1,0 +1,74 @@
+{
+    "alarm_json_input": {
+        "target_type": "EDGE",
+        "target": "edge1",
+        "database_name": "db_name",
+        "severity": "CRITICAL",
+        "description": "alarm to identify memory leak of process",
+        "markers": [
+            "START_MARKER",
+            "END_MARKER"
+        ],
+        "expression": [
+            {
+                "field": "measurement.field",
+                "normalize": {
+                    "operation": "percentage"
+                },
+                "operator": "any_operator",
+                "value": "max value"
+            }
+        ],
+        "action": {
+            "send_mail": true,
+            "download_logs": false
+        }
+    },
+    "db_type": "INFLUX",
+    "enable_monitor": true,
+    "in_memory_operation": true,
+    "influx_db_config": {
+        "ip": "",
+        "port": 8086,
+        "database": ""
+    },
+    "launcher_ip": null,
+    "mail_config": {
+        "mail_from": "monitoring-support@vmware.com",
+        "mail_to": null,
+        "subject": "Monitoring Analysis Report",
+        "bcc": "monitoring-support@vmware.com",
+        "description": ""
+    },
+    "monitor": "ccopy_reg\n_reconstructor\np0\n(cpython_programs.context\nMonitor\np1\nc__builtin__\nobject\np2\nNtp3\nRp4\n.",
+    "monitor_logger": "ccopy_reg\n_reconstructor\np0\n(clogging\nLogger\np1\nc__builtin__\nobject\np2\nNtp3\nRp4\n(dp5\nVfilters\np6\n(lp7\nsVname\np8\nVmonitor\np9\nsVlevel\np10\nL0L\nsVparent\np11\ng0\n(clogging\nRootLogger\np12\ng2\nNtp13\nRp14\n(dp15\ng6\n(lp16\nsg8\nVroot\np17\nsg10\nL30L\nsg11\nNsVpropagate\np18\nI01\nsVhandlers\np19\n(lp20\nsVdisabled\np21\nI00\nsbsg18\nI01\nsg19\n(lp22\nsg21\nI00\nsVmanager\np23\ng0\n(clogging\nManager\np24\ng2\nNtp25\nRp26\n(dp27\ng17\ng14\nsVdisable\np28\nL0L\nsVemittedNoHandlerWarning\np29\nI00\nsVloggerDict\np30\n(dp31\ng9\ng4\nssVloggerClass\np32\nNsVlogRecordFactory\np33\nNsbsb.",
+    "mysql_db_config": {
+        "ip": "",
+        "port": 80,
+        "database": ""
+    },
+    "nsx_edge_ips": [],
+    "nsx_edge_root_password": "Admin!23Admin",
+    "nsx_edge_root_username": "root",
+    "nsx_manager_ips": [],
+    "nsx_manager_root_password": "",
+    "nsx_manager_root_username": "",
+    "report_path": "/tmp",
+    "report_sever_url": null,
+    "suite_markers": null,
+    "telegraf_conf": {
+        "influx": {
+            "ip": "1.1.1.1",
+            "port": "8086",
+            "database": "Local_run"
+        },
+        "memory": {
+            "enabled": true
+        },
+        "cpu": {
+            "enabled": true
+        }
+    },
+    "temp_path": "/tmp",
+    "testcase_markers": null
+}
