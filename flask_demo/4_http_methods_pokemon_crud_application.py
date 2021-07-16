@@ -1,4 +1,4 @@
-from flask import Flask, url_for, jsonify, request, abort
+from flask import Flask, url_for, jsonify, request
 
 app = Flask(__name__)
 app.config['DEBUG'] = True
