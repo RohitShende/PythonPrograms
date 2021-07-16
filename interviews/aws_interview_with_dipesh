@@ -1,0 +1,61 @@
+# import time
+#
+#
+# def retry(func, count=3):
+#     def inner(*args, **kwargs):
+#         for i in range(count):
+#             if func(*args, **kwargs) is True:
+#                 break
+#             print("Retrying in 5 sec")
+#             time.sleep(5)
+#     return inner
+#
+#
+# @retry
+# def update():
+#     return False
+#
+#
+# update()
+
+
+# Check whether two strings are anagram of each other
+
+s1 = "abcddddeeeaaaaa"
+s2 = "aaaaeeedcbddd"
+
+
+def counter(s):
+    d = {}
+    for i in s:
+        if i in d:
+            d[i] += 1
+        else:
+            d[i] = 1
+    return d
+
+
+print(counter(s1) == counter(s2))
+
+
+
+
+"""
+Customer
+    cust_id
+    cust_name
+
+Order_of_Customer
+    order_id
+    cust_id
+    
+Order
+    order_id
+    order_name
+"""
+
+"""
+all customer names with or without order
+select Customer.cust_name, Order_of_Customer.order_id from Customer 
+left outer join Order_of_Customer on Customer.cust_id = Order_of_Customer.cust_id
+"""
