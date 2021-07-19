@@ -19,5 +19,3 @@ for i in range(N):
     print(f"Iteration - {i} the array - {arr}")
 
 print("Sorted Array - ", arr)
-
-
