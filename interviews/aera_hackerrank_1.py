@@ -49,57 +49,44 @@ def get_storage(connection_nodes, connection_edges, connections_from, connection
         node2 = nodes[connections_to[i]]
 
         print('*' * 20, "Iteration number", i, node1.group, node2.group, node1.name, node2.name)
-
+        del_keys = []
         if node1.group is None and node2.group is None:
-            node1.is_grouped = True
-            node2.is_grouped = True
-            node1.group_weight += node2.group_weight
-            node2.group_weight = node1.group_weight
             group_key = ','.join([str(node1.name), str(node2.name)])
-            groups[group_key] = Group(group_key, node1.group_weight)
-            del groups[node1.name]
-            del groups[node2.name]
-            node1.group = groups[group_key]
-            node2.group = groups[group_key]
+            del_keys.append(node1.name)
+            del_keys.append(node2.name)
 
         elif node1.group is None and node2.group is not None:
             # node 2 in group
-            node2.group_weight += node1.group_weight
-            node1.group_weight = node2.group_weight
             group_key = ','.join([str(node1.name), str(node2.group.name)])
-            del_key = node2.group.name
-            node2.group.name = group_key
-            groups[group_key] = node2.group
-            del groups[node1.name]
-            del groups[del_key]
-            node1.group = groups[group_key]
+            del_keys.append(node1.name)
+            del_keys.append(node2.group.name)
 
         elif node1.group is not None and node2.group is None:
             # node 1 in group
-            node1.group_weight += node2.group_weight
-            node2.group_weight = node1.group_weight
             group_key = ','.join([str(node1.group.name), str(node2.name)])
-            del_key = node1.group.name
-            node1.group.name = group_key
-            groups[group_key] = node1.group
-            del groups[del_key]
-            del groups[node2.name]
-            node2.group = groups[group_key]
+            del_keys.append(node1.group.name)
+            del_keys.append(node2.name)
 
         else:
             # both are groups
+            if node1.group.name != node2.group.name:
+                group_key = ','.join([str(node1.group.name), str(node2.group.name)])
+                del_keys.append(node1.group.name)
+                del_keys.append(node2.group.name)
+            else:
+                group_key = None
 
-            node1.group_weight += node2.group_weight
-            node2.group_weight = node1.group_weight
-            group_key = ','.join([str(node1.group.name), str(node2.group.name)])
-            del_key_1 = node1.group.name
-            del_key_2 = node2.group.name
-            node1.group.name = group_key
-            node2.group = node1.group
-            groups[group_key] = node1.group
-            del groups[del_key]
-            del groups[node2.name]
-            node2.group = groups[group_key]
+        if group_key:
+            new_group_weight = node1.group_weight + node2.group_weight
+            new_group = Group(group_key, new_group_weight)
+            groups[group_key] = new_group
+
+            for key in group_key.split(','):
+                nodes[int(key.strip())].group = new_group
+                nodes[int(key.strip())].group_weight = new_group_weight
+
+            for key in del_keys:
+                del groups[key]
 
         print(groups)
         print(nodes)
