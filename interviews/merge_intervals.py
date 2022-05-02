@@ -39,7 +39,6 @@ def merge(arr: list[tuple[int, int]]) -> list[tuple[int, int]]:
 
 def place_interval_in_list(arr: list[tuple], interval: tuple[int, int]) -> list[tuple]:
     x, y = interval
-    n = len(arr)
     # find the places of x and y
     x_place = get_place(arr, x)
     print(arr, interval)
