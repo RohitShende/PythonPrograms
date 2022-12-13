@@ -6,10 +6,10 @@ config = dict()
 # All configuration directives can be found in the documentation.
 
 # Hostname of your LDAP Server
-config['LDAP_HOST'] = 'ldap://ldap.vmware.com'
+config['LDAP_HOST'] = 'ldap://ldap.***.com'
 
 # Base DN of your directory
-config['LDAP_BASE_DN'] = 'dc=vmware,dc=com'
+config['LDAP_BASE_DN'] = 'dc=****,dc=com'
 
 # Users DN to be prepended to the Base DN
 config['LDAP_USER_DN'] = 'cn=Users'
@@ -37,5 +37,5 @@ ldap_manager = LDAP3LoginManager()
 ldap_manager.init_config(config)
 
 # Check if the credentials are correct
-response = ldap_manager.authenticate('rshende', 'Nsbu@vmware123')
+response = ldap_manager.authenticate('<username>', '<password>')
 print(response.status)
