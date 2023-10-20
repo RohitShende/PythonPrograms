@@ -1,0 +1,26 @@
+import joblib
+import requests
+
+graph_token = {'Content-Type': 'application\\json', 'Authorization': 'Bearer eyJ0eXAiOiJKV1QiLCJub25jZSI6IjFNSkZRbUtLRUtNTWxUUG91dllIUnotS2hfQ1AwaUJmckI5MTlTNnRhVkkiLCJhbGciOiJSUzI1NiIsIng1dCI6Ii1LSTNROW5OUjdiUm9meG1lWm9YcWJIWkdldyIsImtpZCI6Ii1LSTNROW5OUjdiUm9meG1lWm9YcWJIWkdldyJ9.eyJhdWQiOiJodHRwczovL2dyYXBoLm1pY3Jvc29mdC5jb20iLCJpc3MiOiJodHRwczovL3N0cy53aW5kb3dzLm5ldC9mYWJiNjFiOC0zYWZlLTRlNzUtYjkzNC1hNDdmNzgyYjhjZDcvIiwiaWF0IjoxNjg5NjAwODk2LCJuYmYiOjE2ODk2MDA4OTYsImV4cCI6MTY4OTYwNTEzNSwiYWNjdCI6MCwiYWNyIjoiMSIsImFjcnMiOlsidXJuOnVzZXI6cmVnaXN0ZXJzZWN1cml0eWluZm8iXSwiYWlvIjoiQVZRQXEvOFRBQUFBaEMrblI4V29vWjhaMTIraEhDNjhySkdtSldCZmJsRlZyU2E2U2h0SEF1T0RoNURUUGhPam9ScFNJRmN3eVBmekxtM2NyT25pbGdKMGpvQWVoL2hEdmdQZEpUTzI0RXRIMGY3M1FqWjJuWkE9IiwiYW1yIjpbInB3ZCIsIm1mYSJdLCJhcHBfZGlzcGxheW5hbWUiOiJNaWNyb3NvZnQgQXp1cmUgQ0xJIiwiYXBwaWQiOiIwNGIwNzc5NS04ZGRiLTQ2MWEtYmJlZS0wMmY5ZTFiZjdiNDYiLCJhcHBpZGFjciI6IjAiLCJkZXZpY2VpZCI6IjkyMTgxZTc4LWQ3YmUtNDgxZS04Mzc2LWU4YjlhNTgwMzIzOCIsImZhbWlseV9uYW1lIjoiVmVtdXJpIiwiZ2l2ZW5fbmFtZSI6IkFqYXkgS3VtYXIiLCJpZHR5cCI6InVzZXIiLCJpcGFkZHIiOiIxOTIuMTYwLjE0Ni4xNjQiLCJuYW1lIjoiVmVtdXJpLCBBamF5S3VtYXIgKENvbnRyYWN0b3IpIiwib2lkIjoiZWY1NDMyZGQtZGZkNS00MjU4LWI5ZmQtYTBkMDc1ODU3ZjMwIiwib25wcmVtX3NpZCI6IlMtMS01LTIxLTIxMzA1MjI0NzgtMTcyNTE4ODA5NC03ODY0OTg2MjctNzE1NDUyIiwicGxhdGYiOiI1IiwicHVpZCI6IjEwMDMyMDAyQTVDRUVEM0IiLCJyaCI6IjAuQVJNQXVHRzctdjQ2ZFU2NU5LUl9lQ3VNMXdNQUFBQUFBQUFBd0FBQUFBQUFBQUFUQUw0LiIsInNjcCI6IkF1ZGl0TG9nLlJlYWQuQWxsIERpcmVjdG9yeS5BY2Nlc3NBc1VzZXIuQWxsIGVtYWlsIEdyb3VwLlJlYWRXcml0ZS5BbGwgb3BlbmlkIHByb2ZpbGUgVXNlci5SZWFkV3JpdGUuQWxsIiwic2lnbmluX3N0YXRlIjpbImR2Y19tbmdkIiwiZHZjX2NtcCIsImlua25vd25udHdrIiwia21zaSJdLCJzdWIiOiJzeXQ3elhWS1EyVDZmN3I2Nm5xSWZLZFZOTTZQSXluMk9HdEE3MksxTGhvIiwidGVuYW50X3JlZ2lvbl9zY29wZSI6Ik5BIiwidGlkIjoiZmFiYjYxYjgtM2FmZS00ZTc1LWI5MzQtYTQ3Zjc4MmI4Y2Q3IiwidW5pcXVlX25hbWUiOiJBamF5S3VtYXIuVmVtdXJpQENWU0hlYWx0aC5jb20iLCJ1cG4iOiJBamF5S3VtYXIuVmVtdXJpQENWU0hlYWx0aC5jb20iLCJ1dGkiOiJTYXR4ZFUzN1hVcVZzaXh1WTdXMUFBIiwidmVyIjoiMS4wIiwid2lkcyI6WyJmMmVmOTkyYy0zYWZiLTQ2YjktYjdjZi1hMTI2ZWU3NGM0NTEiLCJiNzlmYmY0ZC0zZWY5LTQ2ODktODE0My03NmIxOTRlODU1MDkiXSwieG1zX2NjIjpbIkNQMSJdLCJ4bXNfc3QiOnsic3ViIjoiVkZ5MnNtMldvdmxKWkFXbEY2RlZnUHhPTjFVcDdzM3NDa0RYVVRaWmxvMCJ9LCJ4bXNfdGNkdCI6MTM4NjM0ODg0Nn0.r8pz6ILeXyPYuSuU8Hx8-X5O27P_nTthByEQ-eFzbOREt7iAzcPiHRvfhlEvvwdv1jkmMnmeT2mgqWqq56RkeVnnuOxNxughMaEZ8wrD35vhswhDb1u6BKGi24lti9OyjAy7O5olQVYXM54C4K3zIMTAR2A2q1h3F1dm3pfeqS6eC_tPUdWtxUs8-AXlPjGVsOnClspShfZhPdf093u79nOobOXSO1ouixk9e_VIah3ULkfXT6xbfUFeBbO8kyVGvfsUKALuy2QYRGo9Bg3DVAQlJ1ZNo8dN45FS7iUkJn6CcjtMDYyrmBjitGOpDnEYz8iw8IOLRrqJfDQOW3_Z0A', 'ConsistencyLevel': 'eventual'}
+
+urls = ['https://graph.microsoft.com/v1.0/servicePrincipals/1424e565-9f8f-476c-836a-ed3ea2ca3a7f', 'https://graph.microsoft.com/v1.0/servicePrincipals/70ed441c-5f5a-4cf1-8b23-aec5b50749eb', 'https://graph.microsoft.com/v1.0/servicePrincipals/9fdc0227-8741-4048-ab65-6c06c3a59972', 'https://graph.microsoft.com/v1.0/servicePrincipals/a219b8fe-cd98-4793-b8e4-f94561a51b40', 'https://graph.microsoft.com/v1.0/servicePrincipals/a219b8fe-cd98-4793-b8e4-f94561a51b40', 'https://graph.microsoft.com/v1.0/servicePrincipals/4ffb5e9d-3a5b-41a3-96f9-aea3f5d76bbf', 'https://graph.microsoft.com/v1.0/servicePrincipals/0f007f60-be6a-4f74-abd7-469faa9c2868', 'https://graph.microsoft.com/v1.0/servicePrincipals/a219b8fe-cd98-4793-b8e4-f94561a51b40', 'https://graph.microsoft.com/v1.0/servicePrincipals/9fdc0227-8741-4048-ab65-6c06c3a59972', 'https://graph.microsoft.com/v1.0/servicePrincipals/723e60de-6f0f-4695-9717-1a6855469b6e', 'https://graph.microsoft.com/v1.0/servicePrincipals/9fdc0227-8741-4048-ab65-6c06c3a59972']
+
+
+def get_name_from_id(url, token):
+    response = requests.get(url, headers=token)
+    if response.status_code == 200:
+        resp_json = response.json()
+        return resp_json['displayName']
+    print(response.status_code)
+    print(response.text)
+
+
+# number_of_cpu = joblib.cpu_count()
+#
+# delayed_funcs = [joblib.delayed(get_principal_name)(url, graph_token) for url in urls]
+# parallel_pool = joblib.Parallel(n_jobs=number_of_cpu)
+# parallel_pool(delayed_funcs)
+
+with joblib.parallel_backend(backend="loky"):
+    parallel = joblib.Parallel(verbose=100)
+    print(parallel([joblib.delayed(get_name_from_id)(url, graph_token) for url in urls]))
