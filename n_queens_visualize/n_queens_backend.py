@@ -14,6 +14,7 @@ class Chess:
         print(f'Board initialized for N = {self.N}')
         self.print_board()
         self.all_possibilities = []
+        self.solution_found = False
 
     def print_all_possibilities(self):
         print("All Possibilities : \n")
@@ -92,16 +93,19 @@ class Chess:
             solution = [''.join(i) for i in self.board]
             self.all_possibilities.append(solution)
             print("Possibility Captured")
+            self.solution_found = True
             self.print_board()
             print("\n\n\n")
             if self.sleep:
                 time.sleep(self.sleep*3)
             return
 
+        self.solution_found = False
         for row in range(self.N):
             if self.mark_queen_at_pos(row, col):
                 # mark queen in next col
                 self.backtrack(col=col + 1)
+                self.solution_found = False
                 self.un_mark_queen_at_pos(row, col)
 
     def place_queen(self) -> List:

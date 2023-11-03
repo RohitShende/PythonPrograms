@@ -1,5 +1,4 @@
 import tkinter as tk
-import time
 from tkinter import Button, Label, Entry, Toplevel
 from functools import partial
 from threading import Thread
@@ -57,6 +56,7 @@ class ChessBoard(tk.Frame):
         """ Clear all the existing pieces """
         self.pieces = {}
         self.canvas.delete("piece")
+        self.canvas.delete("green_square")
 
     def refresh(self, event=None):
         '''Redraw the board, possibly in response to window being resized'''
@@ -92,8 +92,16 @@ class ChessBoard(tk.Frame):
                     positions.append((i, j))
         return positions
 
-    def highlight_solution(self, positions):
-        self.canvas.update()
+    def highlight_solution(self, positions, solution_found: bool):
+        # color the borders of the square where queen is placed to green
+        if solution_found:
+            for position in positions:
+                i, j = position
+                x1 = (j * self.size)
+                y1 = (i * self.size)
+                x2 = x1 + self.size
+                y2 = y1 + self.size
+                self.canvas.create_rectangle(x1, y1, x2, y2, outline="green", width=5, tags="green_square")
 
     def fetch_curr_board(self, chess, window):
         print("**************************   fetch_curr_board_called")
@@ -108,10 +116,12 @@ class ChessBoard(tk.Frame):
             i, j = position
             print('Adding piece', f"queen-{index} at", i, j)
             self.addpiece(f"queen-{index}", self.queen, i, j)
-        # self.highlight_solution(curr_positions)
+
+        print("Solution Found : ", chess.solution_found)
+        self.highlight_solution(curr_positions, chess.solution_found)
         self.refresh()
 
-        window.after(500, self.fetch_curr_board, chess, window)
+        window.after(200, self.fetch_curr_board, chess, window)
 
 
 def start_processing(n_entry):
@@ -125,7 +135,7 @@ def start_processing(n_entry):
     board = ChessBoard(chess_window, rows=n, columns=n)
     board.pack(side="top", fill="both", expand="true", padx=10, pady=10)
 
-    chess = Chess(number_of_squares=n, sleep_after_operation=2)
+    chess = Chess(number_of_squares=n, sleep_after_operation=0.4)
 
     thread = Thread(name='chess_backend', target=chess.place_queen)
     thread.start()
