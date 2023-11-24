@@ -61,7 +61,10 @@ class DLL:
         self.size += 1
 
     def remove_node(self, node):
-        if node == self.head:
+        if self.size == 1:
+            self.head = None
+            self.tail = None
+        elif node == self.head:
             self.head = self.head.next
             self.head.prev = None
         elif node == self.tail:
