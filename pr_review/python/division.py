@@ -5,6 +5,20 @@ division operations it takes
 
 
 def divide_until_one(a, b):
+    """
+    Repeatedly divides an integer by a divisor until it becomes one.
+    
+    This function repeatedly applies integer division on the given number until the result 
+    reaches one, incrementing a counter for each division performed. It assumes that the repeated 
+    division will eventually yield 1 and that the divisor is non-zero.
+        
+    Args:
+        a (int): The integer to be reduced to one.
+        b (int): The divisor used for each integer division.
+    
+    Returns:
+        int: The total number of division operations performed.
+    """
     count = 0
     while a != 1:
         a //= b
